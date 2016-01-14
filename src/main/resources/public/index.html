@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div id="app">
+        <div class="sticky">
+            <nav class="top-bar" data-topbar role="navigation" id="top-bar">
+                <ul class="title-area">
+                    <li class="name">
+                        <h1>
+                        <a href="#">Recruiteranking</a>
+                    </h1>
+                    </li>
+                </ul>
+                <section class="top-bar-section">
+                    <ul class="right">
+                    	<li class="active" v-if="user">
+                            <a href="#" v-on:click="createRecruiter">New Recruiter</a>
+                        </li>
+                        <li class="active" v-if="user">
+                            <user v-bind:username="user.username"></user>
+                        </li>
+                        <li class="active" v-else>
+                            <a href="#" v-on:click="showLogin">Log In</a>
+                        </li>
+                    </ul>
+                </section>
+            </nav>
+        </div>
+        <div class="small-12 columns" id="sign-in-on" v-show="loggingIn">
+            <div class="row">
+                <div class="large-12 columns">
+                    <div class="signup-panel">
+                        <login action="/api/login">
+                        </login>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row panel" id="main">
+            	<div class="large-6 columns">
+                	<grid :data="gridData" :columns="gridColumns"></grid>
+                </div>
+                <div class="large-6 columns" v-show="detail">
+                	<detail :payload="detail" :editable="user" action="/api/recruiter">
+
+                	</detail>
+                </div>
+            
+        </div>
+    </div>
+    <script type="text/javascript" src="bundle.js"></script>
+</body>
+
+</html>
