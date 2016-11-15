@@ -14,17 +14,25 @@ import org.boon.json.ObjectMapper;
 import spark.Spark;
 import spark.servlet.SparkApplication;
 
-/**
- * @author Matt Tyson
- *
- */
+
 public class App implements SparkApplication {
-	private static Controller controller = new Controller();
-    public static void main( String[] args ) {
+
+	private static Controller controller = null;
+	static {
+		if (Boolean.valueOf(System.getenv("USE_MEMDB"))) {
+			System.out.println("Using MemDB");
+			controller = new MemDBController();
+		} else {
+			System.out.println("Using CloudantDB");
+			controller = new CloudantController();
+		}
+	}
+
+	public static void main( String[] args ) {
     	new App().init();
-    }	
-    public void init()
-        {
+  }
+
+  public void init() {
     	// Remember: Need to allow Bluemix environment to set port
     	String strPort = System.getenv().get("PORT");
     	Integer port = 4567;
@@ -32,14 +40,14 @@ public class App implements SparkApplication {
     		port = Integer.parseInt(strPort);
     	}
     	Spark.port(port);
-    	
+
     	Spark.staticFileLocation("/public"); // The static asset location
-    	
+
     	Spark.post("/api/login", (req, res) -> {
-    		return controller.postRecruiter(req, res);
+    		return controller.login(req, res);
     	});
     	Spark.post("/api/login/", (req, res) -> {
-    		return controller.postRecruiter(req, res);
+    		return controller.login(req, res);
     	});
     	Spark.get("/api/recruiter", (req, res) -> {
     		return controller.getRecruiters(req, res);
@@ -71,5 +79,5 @@ public class App implements SparkApplication {
     	Spark.get("/api/test/", (req, res) -> {
     		return controller.test(req, res);
     	});
-    }
+  }
 }

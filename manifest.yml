@@ -1,0 +1,9 @@
+applications:
+- name: simple-app
+  memory: 512M
+  instances: 1
+  host: app4telstra
+  domain: au-syd.mybluemix.net
+  path: ./target/rr-backend-war-1.0-SNAPSHOT.war
+  services:
+  - cloudant-test-cloudantNoSQLDB
